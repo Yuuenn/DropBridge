@@ -70,9 +70,9 @@ if ($missing.Count -gt 0) {
     throw ("missing backends:`n  " + ($missing -join "`n  ") + "`nbuild them first (tools\Build-*.ps1)")
 }
 
-# radio 49876, netd IPC 49877 and the receiver's 8771 are TCP listeners; netd's
+# radio 49900, netd IPC 49901 and the receiver's 8771 are TCP listeners; netd's
 # local mDNS socket 15353 is UDP, so it needs the UDP endpoint table.
-$tcpPorts = @(49876, 49877, 8771)
+$tcpPorts = @(49900, 49901, 8771)
 $udpPorts = @(15353)
 function Get-BusyPorts {
     $held = @()
@@ -246,7 +246,7 @@ try {
     Start-Backend -Name 'radio' -Exe $binaries.radio -Arguments $radioArgs `
         -Environment @{ AIRBRIDGE_LOG_LEVEL = $(if ($RadioVerbose) { 'info' } else { 'warn' }); AIRBRIDGE_LINK_STATS = '1'; AIRBRIDGE_FASTRETUNE_FW = '2'
                         AIRBRIDGE_PARENT_PID = [string]$PID } | Out-Null
-    Wait-Ready -Name 'radio' -Needle 'listening on 127.0.0.1:49876' -TimeoutSeconds $ReadyTimeoutSeconds
+    Wait-Ready -Name 'radio' -Needle 'listening on 127.0.0.1:49900' -TimeoutSeconds $ReadyTimeoutSeconds
 
     Start-Backend -Name 'bridge' -Exe $binaries.bridge -Arguments @() -Environment @{} | Out-Null
     Wait-Ready -Name 'bridge' -Needle 'waiting for awdld' -TimeoutSeconds 30

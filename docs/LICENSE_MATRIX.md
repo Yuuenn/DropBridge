@@ -31,7 +31,7 @@
 
 - `airbridge_radio.exe` 链接 devourer（GPL-2.0），因此该可执行文件整体按 **GPL-2.0-only** 分发；分发时必须同时提供对应源码（含 `src/radio_usb`、`patches/devourer-airbridge.patch` 和构建脚本）。
 - `awdld.exe` 基于 OWL，按 **GPL-3.0-or-later** 分发。
-- 两者**不链接**：awdld 通过命名管道连 `radio_pipe_bridge.exe`，桥再经本地 TCP 49876 连 radio，传的是 `radio_link.h`（MIT）定义的消息，桥只搬字节。这是当前唯一能避免 GPL-2.0-only 与 GPL-3.0-or-later 直接合并的边界。
+- 两者**不链接**：awdld 通过命名管道连 `radio_pipe_bridge.exe`，桥再经本地 TCP 49900 连 radio，传的是 `radio_link.h`（MIT）定义的消息，桥只搬字节。这是当前唯一能避免 GPL-2.0-only 与 GPL-3.0-or-later 直接合并的边界。
 - 发布物（文件夹 + zip，托盘负责开机自启和拉起各进程）把 `airbridge_radio.exe`、`awdld.exe` 和应用层放在一起，是否被认定为单纯的 aggregate 需要法律确认；README 的自述不能当作结论。
 - 任何 `#include` devourer 头并链接其库的新组件都会落入 GPL-2.0；只包含 `radio_link.h` 的客户端不会。
 - 本仓库自写的源码（托盘、桥、netd、radio 的自写部分等）自 2026-11-10 起为 MIT；应用层里来自 WinAWDL `airdrop/` 的部分也是 MIT。MIT 与 GPL 兼容，所以 `airbridge_radio.exe` 作为分发的二进制仍整体按 GPL-2.0 分发（因为链接 devourer），`awdld.exe` 仍按 GPL-3.0-or-later 分发，两者没有冲突。捆绑 GPL 组件的发布物整体不能宣称「全部 MIT」。

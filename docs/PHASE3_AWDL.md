@@ -25,7 +25,7 @@
 awdld.exe（WinAWDL/OWL，GPL-3.0）
    │  命名管道 \\.\pipe\winawdl-radio（radio_link v3）
 radio_pipe_bridge.exe（字节泵，不改协议）
-   │  127.0.0.1:49876
+   │  127.0.0.1:49900
 airbridge_radio.exe（C++/devourer，独占 RTL8821CU）
 ```
 

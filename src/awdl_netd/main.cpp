@@ -1,6 +1,6 @@
 /* awdl_netd: user-space AWDL data plane.
  *
- * awdld sends raw IPv6 packets over 127.0.0.1:49877. lwIP terminates
+ * awdld sends raw IPv6 packets over 127.0.0.1:49901. lwIP terminates
  * IPv6/NDP and exposes blocking sockets; TCP 8771 is proxied to receiver.py,
  * mDNS 5353 to the Python announcer. The Windows IPv6 stack is not involved.
  */
@@ -35,7 +35,7 @@ extern "C" void awdl_netd_start_native_mdns(const uint8_t address[16],
 
 namespace {
 
-constexpr uint16_t kIpcPort = 49877;
+constexpr uint16_t kIpcPort = 49901;
 constexpr int kOutboundDefaultPort = 8772;
 constexpr size_t kMaxFrame = 2048;
 constexpr DWORD kIpcSendTimeoutMs = 5000;

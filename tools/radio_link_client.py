@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 
 HOST = "127.0.0.1"
-PORT = int(os.environ.get("AIRBRIDGE_PORT", "49876"))
+PORT = int(os.environ.get("AIRBRIDGE_PORT", "49900"))
 MAX_PAYLOAD = 16384
 
 

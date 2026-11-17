@@ -390,7 +390,7 @@ index 0000000..32c8a6c
 +/* IPC host backend for the user-space AWDL data plane PoC.
 + *
 + * Instead of creating a Wintun adapter, this connects to awdl_netd on
-+ * 127.0.0.1:49877 and exchanges raw IPv6 packets. awdl_netd runs lwIP and
++ * 127.0.0.1:49901 and exchanges raw IPv6 packets. awdl_netd runs lwIP and
 + * proxies AirDrop's TCP 8771 to the local receiver, so the Windows IPv6
 + * stack (and any v2ray TUN) is not involved. */
 +#define WIN32_LEAN_AND_MEAN
@@ -404,7 +404,7 @@ index 0000000..32c8a6c
 +#include <stdlib.h>
 +#include <string.h>
 +
-+#define IPC_PORT 49877
++#define IPC_PORT 49901
 +#define IPC_CONNECT_TRIES 200
 +
 +struct host_if {

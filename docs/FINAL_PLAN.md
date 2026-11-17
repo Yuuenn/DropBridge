@@ -34,7 +34,7 @@
 | 进程 | 文件 | 许可证 | 职责 |
 | --- | --- | --- | --- |
 | 监管 + 托盘 | `AirBridge32.exe` | MIT | 单文件自解压、启动顺序、健康检查、自恢复、通知、日志、退出清理、开机自启（C# / .NET Framework 4.8，Windows 自带运行库） |
-| 无线 | `airbridge_radio.exe` | GPL-2.0 | USB/固件/PHY、radio_link TCP 49876 |
+| 无线 | `airbridge_radio.exe` | GPL-2.0 | USB/固件/PHY、radio_link TCP 49900 |
 | 桥 | `radio_pipe_bridge.exe` | MIT | 命名管道 ↔ radio TCP（V2 可并入其它进程） |
 | AWDL | `awdld.exe` | GPL-3.0 | OWL 控制面、原始 IPv6 |
 | 用户态网络 | `airbridge_netd.exe` | MIT | lwIP、mDNS、TCP 8771 代理 |
@@ -46,11 +46,11 @@
 
 ```text
 iPhone ──AWDL──> RTL8821CU ──USB──> airbridge_radio.exe
-                                        │ TCP 49876
+                                        │ TCP 49900
                                    radio_pipe_bridge.exe
                                         │ 命名管道
                                       awdld.exe
-                                        │ 原始 IPv6（TCP 49877）
+                                        │ 原始 IPv6（TCP 49901）
                                    airbridge_netd.exe（lwIP）
                                         │ UDP 5353 代理 / TCP 8771
                                    receiver.py

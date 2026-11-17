@@ -45,7 +45,7 @@ DropBridge\                唯一形态：一个文件夹，外加同样内容�
 | 进程 | 许可证 | 职责 |
 | --- | --- | --- |
 | `DropBridge.exe` | MIT（本仓库自写源码，2026-11-10 定） | 单实例；按顺序拉起后端；看门狗（进程死亡、radio 静默超过 30 s 判死）；低速告警；作业对象清理；设置；通知；开机自启；装驱动 |
-| `airbridge_radio.exe` | 自写源码 MIT；二进制因链接 devourer 整体按 GPL-2.0 分发 | devourer + libusb 驱动 RTL8821CU，独占 USB，`radio_link` 端口 TCP 49876 |
+| `airbridge_radio.exe` | 自写源码 MIT；二进制因链接 devourer 整体按 GPL-2.0 分发 | devourer + libusb 驱动 RTL8821CU，独占 USB，`radio_link` 端口 TCP 49900 |
 | `radio_pipe_bridge.exe` | MIT（本仓库自写源码） | 命名管道 ↔ radio 的 TCP |
 | `awdld.exe` | GPL-3.0-or-later | OWL 的 AWDL 控制面：选举、时隙、信道序列 |
 | `awdl_netd.exe` | 自写源码 MIT；编译进去的 lwIP 为 BSD-3-Clause（未在本仓库内核对） | lwIP 用户态网络栈、mDNS 代理、TCP 8771 代理 |

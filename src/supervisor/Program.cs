@@ -29,7 +29,7 @@ using Microsoft.Win32;
 // Q55: every backend lives in a Windows job object with KILL_ON_JOB_CLOSE, so
 // when this process dies - including Stop-Process/TerminateProcess, which run no
 // cleanup at all - the OS tears the whole chain down with it. That is what used
-// to leave airbridge_radio/awdl_netd/python holding 49876/49877/8771 and made
+// to leave airbridge_radio/awdl_netd/python holding 49900/49901/8771 and made
 // the next start fail with "port already in use".
 internal static class ChildJob
 {
@@ -814,7 +814,7 @@ internal sealed class Supervisor
     // it before the radio is touched instead of after a 40 s init.
     private static string PortProblem()
     {
-        var ports = new List<int> { 49876, 49877, 8771, 15353 };
+        var ports = new List<int> { 49900, 49901, 8771, 15353 };
         // --allow-send makes netd listen on 8772 too; a stale holder there
         // would otherwise only show up as a silent outbound-proxy failure.
         if (AllowSend) ports.Add(8772);
@@ -896,7 +896,7 @@ internal sealed class Supervisor
         if (busy != null)
         {
             // A previous run that was killed outright leaves backends holding
-            // 49876/49877/8771/15353. Reclaim only our own package's processes,
+            // 49900/49901/8771/15353. Reclaim only our own package's processes,
             // then look again before declaring failure.
             int reclaimed = ReclaimLeftovers();
             if (reclaimed > 0) busy = PortProblem();
@@ -936,7 +936,7 @@ internal sealed class Supervisor
                 { "AIRBRIDGE_PARENT_PID",
                   System.Diagnostics.Process.GetCurrentProcess().Id.ToString() },
             },
-            _root, "listening on 127.0.0.1:49876", _log, OnChildLine);
+            _root, "listening on 127.0.0.1:49900", _log, OnChildLine);
         var bridge = new Child("bridge", BridgePath(), "",
             null, _root, "waiting for awdld", _log);
         var netd = new Child("netd", NetdPath(), "",

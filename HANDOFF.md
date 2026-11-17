@@ -79,10 +79,10 @@ netd。见 [TCP 诊断](docs/TCP_DIAGNOSTICS.md)、[代理修复](docs/TCP_PROXY
 ```text
 iPhone 原生 AirDrop
   -> RTL8821CU / devourer / libusb
-  -> airbridge_radio.exe       TCP 127.0.0.1:49876，radio_link v3
+  -> airbridge_radio.exe       TCP 127.0.0.1:49900，radio_link v3
   -> radio_pipe_bridge.exe    TCP <-> 命名管道
   -> awdld.exe                WinAWDL + OWL，AWDL 控制面/IPv6
-  -> awdl_netd.exe            IPv6 IPC 127.0.0.1:49877，lwIP
+  -> awdl_netd.exe            IPv6 IPC 127.0.0.1:49901，lwIP
   -> Python receiver.py       本地 TLS/HTTP 8771，DVZip/cpio
   -> data/received
 ```

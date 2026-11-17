@@ -1,7 +1,7 @@
 /* radio_pipe_bridge: connect WinAWDL's awdld (named pipe) to our TCP radio.
  *
  * awdld opens \\.\pipe\winawdl-radio and speaks radio_link v3. Our radio listens
- * on 127.0.0.1:49876. This bridge is a byte pump; it does not parse or change
+ * on 127.0.0.1:49900. This bridge is a byte pump; it does not parse or change
  * the protocol.
  */
 #define WIN32_LEAN_AND_MEAN
@@ -19,7 +19,7 @@
 namespace {
 
 constexpr const char *kTcpHost = "127.0.0.1";
-constexpr int kTcpPort = 49876;
+constexpr int kTcpPort = 49900;
 
 SOCKET connect_tcp() {
     for (int attempt = 0; attempt < 120; attempt++) {

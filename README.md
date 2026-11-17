@@ -122,7 +122,7 @@ DropBridge\
 
 ```text
 iPhone ──AWDL──▶ RTL8821CU（MI_02 = WinUSB）
-  └▶ airbridge_radio.exe    devourer 用户态驱动（libusb），TCP 49876
+  └▶ airbridge_radio.exe    devourer 用户态驱动（libusb），TCP 49900
   └▶ radio_pipe_bridge.exe  命名管道 ↔ TCP
   └▶ awdld.exe              OWL 的 AWDL 控制面（打补丁，走 IPC 后端）
   └▶ awdl_netd.exe          lwIP 用户态网络栈、mDNS 与 TCP 8771 代理

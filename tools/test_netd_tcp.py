@@ -331,8 +331,8 @@ class Run:
         self.peer = None
         self.sock = None
         try:
-            self.wait_line(lambda line: 'waiting for awdld on 127.0.0.1:49877' in line)
-            sock = socket.create_connection(('127.0.0.1', 49877), timeout=2)
+            self.wait_line(lambda line: 'waiting for awdld on 127.0.0.1:49901' in line)
+            sock = socket.create_connection(('127.0.0.1', 49901), timeout=2)
             sock.sendall(b'AWDL' + LOCAL)
             self.sock = sock
             self.wait_line(lambda line: 'TCP 8771 -> 127.0.0.1:8771 ready' in line)

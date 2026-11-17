@@ -56,7 +56,7 @@ namespace {
 constexpr int kRssiFloorDbm = -110;
 constexpr size_t kRadiotapBytes = 10;
 constexpr uint32_t kRadiotapPresent = (1u << 1) | (1u << 5);
-constexpr uint16_t kDefaultPort = 49876;
+constexpr uint16_t kDefaultPort = 49900;
 
 int env_int(const char *name, int fallback) {
     const char *v = std::getenv(name);

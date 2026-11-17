@@ -10,7 +10,7 @@ iPhone
 radio.exe（RTL8821CU）
   ↕ radio_link TCP / 命名管道桥
 awdld / OWL（AWDL 控制面，GPL-3.0）
-  ↕ 原始 IPv6 包（本地 TCP 49877，不进 Windows IP 栈）
+  ↕ 原始 IPv6 包（本地 TCP 49901，不进 Windows IP 栈）
 awdl_netd（lwIP 2.2.2，用户态）
   ├─ IPv6 / ICMPv6 / NDP
   ├─ mDNS 5353：广播 AirBridge32 / _airdrop._tcp
@@ -53,7 +53,7 @@ cmake --build build/awdl --parallel 8
 ```text
 1. airbridge_radio.exe 149 20
 2. radio_pipe_bridge.exe
-3. awdl_netd.exe                         # 监听 49877，等待 awdld
+3. awdl_netd.exe                         # 监听 49901，等待 awdld
 4. awdld.exe -c 149 -s 2 -j 400 -v       # 不再需要管理员/Wintun
 5. python receiver.py --name AirBridge32 --listen 127.0.0.1 --mdns-address-file build\awdl_netd.addr --outdir build\received --trace
 ```

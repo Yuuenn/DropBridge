@@ -88,7 +88,7 @@ if(Python3_Interpreter_FOUND)
         --case soak --mb 4 --cycles 2 --mdns)
     set_tests_properties(netd_proxy_soak_mdns PROPERTIES TIMEOUT 180
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
-    # All these process tests own 49877; never connect to a pre-existing chain.
+    # All these process tests own 49901; never connect to a pre-existing chain.
     set_tests_properties(netd_process_faults netd_tcp_roundtrip netd_tcp_faults netd_proxy_soak
         netd_proxy_soak_mdns PROPERTIES RESOURCE_LOCK netd_loopback)
 endif()

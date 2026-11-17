@@ -21,7 +21,7 @@
 
 | ID | 事项 | 依赖 | 完成判据 | 状态 | 证据 |
 | --- | --- | --- | --- | --- | --- |
-| Q71 | 本机部署当前 HEAD | Q68–Q70 | MI_02 绑定 WinUSB；当前源码完整构建、离线测试、打包自检；真机启动与文件传输另记 | 🔜 2026-11-17：MI_02 已绑定 WinUSB，MI_00 蓝牙正常，Realtek 驱动已本地备份；radio 2/2、托盘 3/3、netd 2/7 通过，netd 其余 5 项因 Hyper-V 排除 TCP 49781–49880（覆盖 49876/49877）无法启动；便携包 26.1 MB 且 `--check` exit 0。未修改网络配置、未初始化或发射无线帧 | `evidence/deploy-2026-11-17.md` |
+| Q71 | 本机部署当前 HEAD | Q68–Q70 | MI_02 绑定 WinUSB；当前源码完整构建、离线测试、打包自检；真机启动与文件传输另记 | 🔜 2026-11-17：MI_02 已绑定 WinUSB，MI_00 蓝牙正常，Realtek 驱动已本地备份；Hyper-V 排除 TCP 49781–49880，故内部端口从 49876/49877 迁移到空闲且未排除的 49900/49901，不修改系统网络配置。迁移后 radio 2/2、托盘 3/3、netd 7/7 通过；待重打包、真机启动与传输 | `evidence/deploy-2026-11-17.md` |
 | Q1 | receiver 离线吞吐台 | 无 | 20 MB 三次，给出 Python/TLS/zlib 侧 MB/s 上限与结论 | ✅ 2026-10-27：compressed 228 MB/s、stored 278 MB/s，非瓶颈 | `evidence/bench-receiver.md` |
 | Q2 | 身份证书去掉外部 openssl | 无 | 无 Git/OpenSSL 的 PATH 下能生成证书并 `/Discover` 200 | ✅ 2026-10-27：cryptography 进程内生成，openssl 仅回退 | `evidence/identity-no-openssl.log` |
 | Q3 | 无壳手动链路脚本 | 写脚本无依赖；**跑需授权** | 一键起停、日志分离、退出无残留 | 🔜 脚本与无壳包完成（dry-run、端口冲突、打包后路径均验证）；`-Run` 待授权 | `tools/Start-Chain.ps1`、`tools/Package-Headless.ps1` |

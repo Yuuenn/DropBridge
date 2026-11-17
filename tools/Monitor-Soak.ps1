@@ -52,7 +52,7 @@ while ((Get-Date) -lt $deadline) {
         }
     }
     # 15353 is netd's local mDNS socket and is UDP, not a TCP listener.
-    $ports = @(49876, 49877, 8771 | ForEach-Object {
+    $ports = @(49900, 49901, 8771 | ForEach-Object {
             if (Get-NetTCPConnection -State Listen -LocalPort $_ -ErrorAction SilentlyContinue) { $_ }
         })
     if (Get-NetUDPEndpoint -LocalPort 15353 -ErrorAction SilentlyContinue) { $ports += '15353/udp' }

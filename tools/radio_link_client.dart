@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 const host = '127.0.0.1';
-const port = 49876;
+const port = 49900;
 
 Future<Socket> connectWithRetry() async {
   final deadline = DateTime.now().add(const Duration(seconds: 90));

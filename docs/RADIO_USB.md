@@ -5,7 +5,7 @@
 ## 已实现并验证
 
 - `airbridge_radio.exe`：libusb 打开 `0bda:c820`、claim interface 2、`CreateRadio`、`InitWrite`、`SetTxMode`、`StartRxLoop`。
-- `radio_link` v3 帧格式（MIT）跑在 **localhost TCP（127.0.0.1:49876）** 上；HELLO 带 8 字节消息头。
+- `radio_link` v3 帧格式（MIT）跑在 **localhost TCP（127.0.0.1:49900）** 上；HELLO 带 8 字节消息头。
 - 端口用 `SO_EXCLUSIVEADDRUSE`，避免其他本地服务抢连。
 - RX：客户端 10 秒收到 **311 帧、28957 字节**，含真实 beacon；RX 回调经有界队列 + 独立写线程，慢客户端不会阻塞 USB RX 环。
 - TX（RX 环同时运行）：客户端经 TCP 发 20 帧，ESP32-S3 空口收到 **20/20 唯一序号 0..19**，RSSI -10..-9，长度 104，哈希与 `txdemo` 一致。
@@ -13,7 +13,7 @@
 - `AIRBRIDGE_TX_RATE` 默认 `1M`，通过 `SetTxMode` 在 bring-up 后设置。
 - **SET_CHANNEL**：客户端从频道 6 切到 36，radio 日志 `channel -> 36`；切换后 2 秒收到 64 帧，切回/过滤测试正常。
 - **BSSID 过滤**：设置 `00:11:22:33:44:55` 后 2 秒 0 帧；发送全零清除后 2 秒恢复 62 帧。全零现在表示“清除过滤”。
-- **Dart 客户端**：`tools/radio_link_client.dart` 连接 `127.0.0.1:49876`，收到 `HELLO version=3`，5 秒收 **84 帧 / 14664 字节**。Dart 的 `Socket` 可用，IPC 选择成立。
+- **Dart 客户端**：`tools/radio_link_client.dart` 连接 `127.0.0.1:49900`，收到 `HELLO version=3`，5 秒收 **84 帧 / 14664 字节**。Dart 的 `Socket` 可用，IPC 选择成立。
 - **SET_ADDRESS / SetStationIdentity**：BSSID 必须是单播（首字节偶数）且非零、与 own 不同；用 `56:42:75:05:d6:00` 成功 armed。devourer 警告 `tx.retry_limit=0`，MAC 不会重传未确认帧；空口 ACK 行为仍未验证。
 - **断连重连**：radio 改为 accept 循环，保持初始化状态。实测连续两个客户端都能收到 HELLO 并收包；第二个客户端之后还能发 5 帧 TX（`tx sent 5 failed 0`），不需要重启 radio。
 - **retry_limit**：`AIRBRIDGE_RETRY_LIMIT` 默认 7（0..63）。设为 7 后 `SetStationIdentity` 不再出现 `retry_limit=0` 警告，MAC 会按硬件 ARQ 重传未确认帧。
@@ -44,7 +44,7 @@ cmake -S src/radio_usb -B build/radio_usb -G "Visual Studio 17 2022" -A x64 `
 cmake --build build/radio_usb --config Release --target airbridge_radio
 ```
 
-运行：`build/radio_usb/Release/airbridge_radio.exe 6 20`（初始化后监听 `127.0.0.1:49876`）。
+运行：`build/radio_usb/Release/airbridge_radio.exe 6 20`（初始化后监听 `127.0.0.1:49900`）。
 
 ## 测试客户端
 

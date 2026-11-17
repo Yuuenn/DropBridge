@@ -34,18 +34,18 @@ def check(exe, name, pieces, expected, pending=None, heartbeat=False, connect_de
     try:
         deadline = time.monotonic() + 5
         # Connect only after THIS process confirms it owns the listener. If
-        # another chain owns 49877, abort instead of touching that chain.
+        # another chain owns 49901, abort instead of touching that chain.
         while True:
             remaining = deadline - time.monotonic()
             assert remaining > 0, 'netd listener not ready'
             line = events.get(timeout=remaining)
-            if 'waiting for awdld on 127.0.0.1:49877' in line:
+            if 'waiting for awdld on 127.0.0.1:49901' in line:
                 break
             assert process.poll() is None, 'netd failed before binding its listener'
         if connect_delay:
             time.sleep(connect_delay)
             assert process.poll() is None, 'waiting for the first peer looked like link failure'
-        with socket.create_connection(('127.0.0.1', 49877), timeout=2) as peer:
+        with socket.create_connection(('127.0.0.1', 49901), timeout=2) as peer:
             peer.sendall(b'AWDL' + ipaddress.IPv6Address('fe80::200:ff:fe00:1').packed)
             if heartbeat:
                 deadline = time.monotonic() + 8
