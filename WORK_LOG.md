@@ -8,6 +8,8 @@
 - radio 离线测试 2/2、托盘测试 3/3 通过；netd 2/7 通过，另 5 项因 Hyper-V 将 TCP 49781–49880 设为排除范围而无法监听 49877。未获网络配置变更授权，未调整该范围。
 - 生成 `dist/DropBridge-portable.zip`（26.1 MB），解包布局 `DropBridge.exe --check` exit 0。尚未初始化网卡、发射 AWDL 帧或做真实文件传输。
 - 用户授权后未修改 Hyper-V/HNS，而是把内部 radio/netd 端口迁移到未排除且空闲的 49900/49901；同步更新运行代码、补丁源、监管、测试与现行文档。迁移后 radio 2/2、托盘 3/3、netd 7/7 全部通过。
+- 新包以 `--auto-exit 180` 做真机启动：RTL8821CU 固件 11.7 ms 就绪，约 42 s 后六进程及 TCP 49900/49901/8771、UDP 15353 全部就绪；beacon `advertising`，receiver `receiving as DropBridge`，AWDL 自身成为主控并持续发射，最终 tx=3524/failed=0。环境中未出现 Apple peer（peers 0），未验证发现与传输。自动退出后无进程/端口残留，radio `shutdown: done`/exit 0，MI_00/MI_02 均保持正常。
+- 同次启动暴露通知注册问题：`register.ps1` 报 `shortcut does not carry the AppUserModelID`；不影响接收数据面，需单独复现和修复/issue 评估。
 
 ## 2026-11-10：新增发布前核对清单
 
