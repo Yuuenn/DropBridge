@@ -1,5 +1,13 @@
 # 工作记录 / 下一位 Agent 交接
 
+## 2026-11-17：RTL8821CU 驱动部署与当前 HEAD 复编译
+
+- `0BDA:C820` 的 MI_02 从 `RtlWlanu` 切换为 `WINUSB`（`oem46.inf`），MI_00 蓝牙保持 `BTHUSB` 正常；切换前已把 Realtek 驱动导出到本地 `build/driver-backup`，不纳入 Git。
+- 恢复 `sources.lock.json` 五个锁定上游、lwIP `77dcd25a`、Python 3.12.10 与记录的 Python 包版本；应用项目补丁后成功编译 radio、awdld、netd 与托盘。
+- 修复两处构建工具兼容性：托盘使用标准 .NET 4.8 引用程序集且不把引号作为参数内容传给 `csc`；radio 不再强制 pkgconf 的 MSVC `/I` 语法，避免 CMake 将其当目录名。
+- radio 离线测试 2/2、托盘测试 3/3 通过；netd 2/7 通过，另 5 项因 Hyper-V 将 TCP 49781–49880 设为排除范围而无法监听 49877。未获网络配置变更授权，未调整该范围。
+- 生成 `dist/DropBridge-portable.zip`（26.1 MB），解包布局 `DropBridge.exe --check` exit 0。尚未初始化网卡、发射 AWDL 帧或做真实文件传输。
+
 ## 2026-11-10：新增发布前核对清单
 
 - 新增 `docs/RELEASE_CHECKLIST.md`，七部分：Windows 编译与测试、包内容、真机功能（含 Q68–Q70 改动的逐项验证）、干净机器从零安装与卸载回滚、许可证与合规、版本可复现与文档一致、发布动作。全部条目未完成。
