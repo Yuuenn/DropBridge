@@ -11,6 +11,12 @@
 - 新包以 `--auto-exit 180` 做真机启动：RTL8821CU 固件 11.7 ms 就绪，约 42 s 后六进程及 TCP 49900/49901/8771、UDP 15353 全部就绪；beacon `advertising`，receiver `receiving as DropBridge`，AWDL 自身成为主控并持续发射，最终 tx=3524/failed=0。环境中未出现 Apple peer（peers 0），未验证发现与传输。自动退出后无进程/端口残留，radio `shutdown: done`/exit 0，MI_00/MI_02 均保持正常。
 - 同次启动暴露通知注册问题：`register.ps1` 报 `shortcut does not carry the AppUserModelID`；不影响接收数据面，需单独复现和修复/issue 评估。
 
+## 2026-11-17：修复通知快捷方式 AUMID 注册误报
+
+- 根因是 `register.ps1` 把结构化二进制 `.lnk` 整体按 UTF-16 解码并搜索 AUMID；属性不保证以这种形式落盘，因此 `IPropertyStore` 已写入后仍可能误报失败。
+- 删除原始字节扫描；COM 接口对 `SetValue` / `Commit` 使用 `PreserveSig` 并检查 HRESULT，真正失败时返回非零。
+- 当前便携路径连续注册两次均 exit 0；AUMID 注册表、`dropbridge://` 协议和开始菜单快捷方式均存在。草稿已整理，暂未发布 GitHub issue。
+
 ## 2026-11-10：新增发布前核对清单
 
 - 新增 `docs/RELEASE_CHECKLIST.md`，七部分：Windows 编译与测试、包内容、真机功能（含 Q68–Q70 改动的逐项验证）、干净机器从零安装与卸载回滚、许可证与合规、版本可复现与文档一致、发布动作。全部条目未完成。

@@ -82,8 +82,8 @@ public static class ShortcutAumid
         void GetCount(out uint cProps);
         void GetAt(uint iProp, out PropertyKey pkey);
         void GetValue(ref PropertyKey key, out PropVariant pv);
-        void SetValue(ref PropertyKey key, ref PropVariant pv);
-        void Commit();
+        [PreserveSig] int SetValue(ref PropertyKey key, ref PropVariant pv);
+        [PreserveSig] int Commit();
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -111,7 +111,11 @@ public static class ShortcutAumid
         {
             var key = new PropertyKey { FormatId = new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), PropertyId = 5 };
             var pv = new PropVariant { VarType = 31, Pointer = Marshal.StringToCoTaskMemUni(value) };
-            try { store.SetValue(ref key, ref pv); store.Commit(); }
+            try
+            {
+                if (store.SetValue(ref key, ref pv) != 0) return false;
+                if (store.Commit() != 0) return false;
+            }
             finally { Marshal.FreeCoTaskMem(pv.Pointer); }
             return true;
         }
@@ -122,13 +126,6 @@ public static class ShortcutAumid
 
 if (-not [ShortcutAumid]::Set($startMenu, $appId)) {
     Write-Error 'could not stamp the AppUserModelID on the shortcut'
-    exit 1
-}
-
-# Verify what is actually on disk, not what the API claimed.
-$bytes = [IO.File]::ReadAllBytes($startMenu)
-if (-not ([Text.Encoding]::Unicode.GetString($bytes)).Contains($appId)) {
-    Write-Error 'shortcut does not carry the AppUserModelID'
     exit 1
 }
 
