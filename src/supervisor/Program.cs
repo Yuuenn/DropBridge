@@ -1303,37 +1303,8 @@ internal static class TrayIcons
         return Load(lightTaskbar ? ForLightTaskbar : ForDarkTaskbar, size);
     }
 
-    /* Real display scale (1.75 on a 175 % monitor). The process is DPI-unaware on
-     * purpose, so this has to be read on a temporarily aware thread. */
-    public static double RealScale()
-    {
-        IntPtr previous = IntPtr.Zero;
-        try
-        {
-            previous = SetThreadDpiAwarenessContext(new IntPtr(PerMonitorAwareV2));
-            uint dpi = GetDpiForSystem();
-            if (dpi > 0) return dpi / 96.0;
-        }
-        catch (Exception)
-        {
-        }
-        finally
-        {
-            if (previous != IntPtr.Zero)
-            {
-                try { SetThreadDpiAwarenessContext(previous); }
-                catch (Exception) { }
-            }
-        }
-        return 1.0;
-    }
-
-    /* Q59c: the supervisor is a DPI-unaware process, so SystemInformation.SmallIconSize
-     * reports the 96-DPI value (16) even on a 175 % display where the taskbar draws
-     * 28 px. Windows then stretched our 16 px frame, which looked thin and blurry.
-     * Asking for the real size first gives a frame that is drawn 1:1. The awareness
-     * switch is thread-scoped and put back immediately, so the rest of the UI keeps
-     * its current (unaware) layout. */
+    /* Q59c/Q73: ask Windows for the physical small-icon size at the active DPI so
+     * the tray can select a matching ICO frame instead of stretching 16 px art. */
     public static int SmallIconPixels()
     {
         IntPtr previous = IntPtr.Zero;
@@ -1396,6 +1367,7 @@ internal sealed class DeviceNameDialog : Form
 
     public DeviceNameDialog(string current)
     {
+        AutoScaleMode = AutoScaleMode.Dpi;
         Text = "设备名称";
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterScreen;

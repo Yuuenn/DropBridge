@@ -17,10 +17,12 @@ $outDir = Join-Path $root 'build\supervisor\Release'
 $out = Join-Path $outDir 'DropBridge.exe'
 $icon = Join-Path $root 'assets\dropbridge.ico'
 $trayDark = Join-Path $root 'assets\dropbridge-tray-white.ico'
+$manifest = Join-Path $root 'src\supervisor\DropBridge.manifest'
 $csc = Join-Path $env:SystemRoot 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 
 if (-not (Test-Path $csc)) { throw "in-box C# compiler missing: $csc" }
 if (-not (Test-Path $source)) { throw "missing $source" }
+if (-not (Test-Path $manifest)) { throw "missing $manifest" }
 New-Item -ItemType Directory -Force $outDir | Out-Null
 
 # The icon is optional so a checkout without assets\ still builds; the tray
@@ -52,7 +54,7 @@ if (-not (Test-Path (Join-Path $wpf 'PresentationCore.dll'))) {
 $wpfArgument = @("/r:$wpf\PresentationCore.dll", "/r:$wpf\WindowsBase.dll",
                  "/r:$framework\System.Xaml.dll")
 
-& $csc /nologo /target:winexe /optimize+ "/out:$out" @iconArgument @resourceArgument @wpfArgument `
+& $csc /nologo /target:winexe /optimize+ "/out:$out" "/win32manifest:$manifest" @iconArgument @resourceArgument @wpfArgument `
     /r:System.Windows.Forms.dll /r:System.Drawing.dll /r:System.Management.dll $source
 if ($LASTEXITCODE -ne 0) { throw "csc failed with $LASTEXITCODE" }
 
@@ -64,6 +66,20 @@ $legacy = Join-Path $outDir 'AirBridge32.exe'
 Copy-Item $out $legacy -Force
 
 if ($Test) {
+    $mt = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -Filter mt.exe -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -match '\\x64\\mt\.exe$' } |
+        Sort-Object FullName -Descending |
+        Select-Object -First 1 -ExpandProperty FullName
+    if (-not $mt) { throw 'Windows SDK mt.exe not found for DPI manifest verification' }
+    $extractedManifest = Join-Path $outDir 'DropBridge.extracted.manifest'
+    & $mt "-inputresource:$out;#1" "-out:$extractedManifest"
+    if ($LASTEXITCODE -ne 0) { throw "manifest extraction failed: $LASTEXITCODE" }
+    $manifestText = Get-Content -LiteralPath $extractedManifest -Raw
+    if ($manifestText -notmatch 'PerMonitorV2' -or $manifestText -notmatch 'true/pm') {
+        throw 'DPI manifest verification failed'
+    }
+    Write-Host 'PASS DPI manifest: PerMonitorV2 with legacy true/pm fallback'
+
     $testExe = Join-Path $outDir 'channel_sequence_test.exe'
     & $csc /nologo /target:exe /main:ChannelSequenceTest "/out:$testExe" @wpfArgument `
         /r:System.Windows.Forms.dll /r:System.Drawing.dll /r:System.Management.dll $source `

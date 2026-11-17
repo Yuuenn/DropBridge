@@ -154,7 +154,8 @@ Python 3.12.10、cryptography 50.0.2，见 [BUILD_WINDOWS.md](BUILD_WINDOWS.md) 
 检查两份资源都能按 16×16 读出来。
 
 小尺寸帧是重新采样出来的，不是另画的：`python tools\icon_frames.py` 从 256 px 母图
-纯 Lanczos 生成 16/20/24/28/32/40/48/64/256 九档。托盘图标按**物理像素**取帧：
-进程是 DPI 不感知的，`TrayIcons.SmallIconPixels()` 用
-`SetThreadDpiAwarenessContext` 临时读真实 DPI，再按 `SM_CXSMICON` 换算
-（本机 175 % → 28 px），否则 Windows 会把 16 px 帧放大到 28 px，看起来又糊又细。
+纯 Lanczos 生成 16/20/24/28/32/40/48/64/256 九档。托盘图标按**物理像素**取帧。
+当前 supervisor 的嵌入 manifest 默认声明 `PerMonitorV2`（旧系统回退 `true/pm`），
+WinForms 菜单、对话框和弹窗随显示器 DPI 缩放；`TrayIcons.SmallIconPixels()` 仍按
+`SM_CXSMICON` 选取最接近的 ICO 帧（本机 175 % → 28 px），避免 Windows 放大
+16 px 帧后发糊。
